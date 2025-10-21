@@ -1,6 +1,4 @@
 use rand::prelude::*;
-use rand::distribution::{Uniform, Distribution};
-use std::fmt;
 
 // 1. Enum pour les stations
 #[derive(Clone, Copy)]
@@ -24,7 +22,7 @@ impl StationType {
     }
     // Pour choisir une station aléatoire
     fn random(rng: &mut ThreadRng) -> StationType {
-        match rng.gen_range(0..5) {
+        match rng.random_range(0..5) {
             0 => StationType::StationA,
             1 => StationType::StationB,
             2 => StationType::StationC,
@@ -56,15 +54,15 @@ impl WeatherRecord {
 
 // 3. Génération de dates aléatoires
 fn generate_random_date(rng: &mut ThreadRng) -> String {
-    let year = rng.gen_range(2020..=2025);
-    let month = rng.gen_range(1..=12);
+    let year = rng.random_range(2020..=2025);
+    let month = rng.random_range(1..=12);
     // Détermination du nombre de jours dans le mois
     let max_day = match month {
         2 => 28,
         4 | 6 | 9 | 11 => 30,
         _ => 31,
     };
-    let day = rng.gen_range(1..=max_day);
+    let day = rng.random_range(1..=max_day);
 
     format!("{:04}-{:02}-{:02}", year, month, day)
 }
@@ -73,8 +71,8 @@ fn generate_random_date(rng: &mut ThreadRng) -> String {
 fn generate_weather_record(rng: &mut ThreadRng) -> WeatherRecord {
     let date = generate_random_date(rng);
     let station = StationType::random(rng);
-    let temperature = rng.gen_range(-10.0..=40.0);
-    let pressure = rng.gen_range(980.0..=1050.0);
+    let temperature = rng.random_range(-10.0..=40.0);
+    let pressure = rng.random_range(980.0..=1050.0);
     WeatherRecord {
         date,
         station,
@@ -85,11 +83,11 @@ fn generate_weather_record(rng: &mut ThreadRng) -> WeatherRecord {
 
 // 5. Fonction main
 fn main() {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
     println!("Date,Station,Temperature,Pressure");
 
-    let num_records = rng.gen_range(10..=20);
+    let num_records = rng.random_range(10..=20);
 
     for _ in 0..num_records {
         let record = generate_weather_record(&mut rng);
